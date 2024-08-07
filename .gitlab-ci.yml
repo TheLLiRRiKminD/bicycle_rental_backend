@@ -1,0 +1,32 @@
+image: python:3.9
+
+services:
+  - postgres:latest
+  - redis:latest
+
+variables:
+  POSTGRES_DB: bike_rental
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/bike_rental
+
+stages:
+  - test
+  - deploy
+
+before_script:
+  - pip install pipenv
+  - pipenv install --dev
+
+test:
+  stage: test
+  script:
+    - pipenv run pytest
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - echo "Deploying to production..."
+    # Добавьте команды для деплоя на ваш облачный провайдер
